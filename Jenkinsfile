@@ -1,12 +1,12 @@
 pipeline {
-  agent { label 'docker-app1' }
+  agent { label 'dev-label' }
   
   stages {
     stage('Prepare') {
       steps {
         script {
           // Move WebApp.war to the target directory
-          sh 'sudo mv /home/ubuntu/target/WebApp.war /home/ubuntu/com'
+          sh 'sudo mv /home/ubuntu/target/WebApp.war /home/ubuntu/test'
         }
       }
     }
@@ -14,8 +14,8 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         script {
-          // Change directory to /home/ubuntu/com
-          dir('/home/ubuntu/com') {
+          // Change directory to /home/ubuntu/test
+          dir('/home/ubuntu/test') {
             // Stop and remove existing Docker container if running
             sh 'docker stop mycontainer || true'
             sh 'docker rm mycontainer || true'
@@ -30,8 +30,8 @@ pipeline {
     stage('Run Docker Container') {
       steps {
         script {
-          // Change directory to /home/ubuntu/com
-          dir('/home/ubuntu/com') {
+          // Change directory to /home/ubuntu/test
+          dir('/home/ubuntu/test') {
             // Run new Docker container
             sh 'docker run -d --name mycontainer -p 8090:8080 myimage'
           }
